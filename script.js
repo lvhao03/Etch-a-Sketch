@@ -1,16 +1,17 @@
 let container = document.querySelector('.container')
 let input = document.querySelector('.input')
 let reset = document.querySelector('.reset')
-console.log(input);
-function change_bg_hover(grid_item, bg_color){
-    grid_item.addEventListener("mouseover", () => {
-        grid_item.style.backgroundColor = bg_color
+let colors = document.querySelectorAll('.color')
+
+function change_bg_hover(item, bg_color){
+    item.addEventListener("mouseover", () => {
+        item.style.backgroundColor = bg_color
     })
 }
 
 function make_row(rows,cols){
-    container.style.setProperty('--grid-rows', rows);
-    container.style.setProperty('--grid-cols', cols);
+    container.style.gridTemplateRows = `repeat(${rows}, 1fr)`
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`
     for (let i = 0; i < (rows * cols); i++) {
         var grid_item = document.createElement('div')
         grid_item.classList.add("item")
@@ -29,11 +30,35 @@ function generate(){
 }
 
 
+function display_CurrentColor(bg_color){
+    var current_color = document.querySelector('.current_color')
+    current_color.style.backgroundColor = bg_color
+}
+
+
+
 input.addEventListener('click', generate)
 reset.addEventListener('click', ()=>{
     var grid_items = document.querySelectorAll('.item')
 
     grid_items.forEach(item =>{
         item.style.backgroundColor = "white"
+    })
+})
+
+colors.forEach(color => {
+    color.addEventListener("click", () => {
+        let element = window.getComputedStyle(color)
+        let bg_color = element.getPropertyValue('background-color')
+
+        var grid_items = document.querySelectorAll('.item')
+
+        display_CurrentColor(bg_color)
+
+        grid_items.forEach(item =>{
+            change_bg_hover(item, bg_color)
+        })
+
+
     })
 })
